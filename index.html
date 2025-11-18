@@ -208,9 +208,15 @@
             gap: 2rem;
         }
 
-        .cover-preview {
+        .cover-preview-container {
             flex: 1;
             min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .cover-preview {
             background-color: var(--light-color);
             border: 1px solid var(--secondary-color);
             border-radius: var(--border-radius);
@@ -269,9 +275,45 @@
             word-wrap: break-word;
         }
 
+        .back-cover-text {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            text-align: center;
+            max-width: 90%;
+            word-wrap: break-word;
+            padding: 1rem;
+        }
+
         .cover-controls {
             flex: 2;
             min-width: 300px;
+        }
+
+        .cover-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .cover-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .cover-tab.active {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .cover-tab-content {
+            display: none;
+        }
+
+        .cover-tab-content.active {
+            display: block;
         }
 
         .form-group {
@@ -290,6 +332,27 @@
             border: 1px solid var(--secondary-color);
             border-radius: var(--border-radius);
             font-size: 1rem;
+        }
+
+        .image-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .remove-image {
+            padding: 0.5rem 1rem;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .remove-image:hover {
+            background-color: #c82333;
         }
 
         .color-picker {
@@ -515,26 +578,19 @@
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Páginas com linhas ajustadas */
+        /* Páginas com linhas ajustadas - CORRIGIDO */
         .lined-page {
-            background-image: linear-gradient(to bottom, #F5F5DC 1px, transparent 1px);
-            background-size: 100% 30px;
             min-height: 500px;
             padding: 1rem;
-            line-height: 30px;
             position: relative;
-        }
-
-        .lined-page::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: linear-gradient(to bottom, transparent 29px, #ccc 29px, #ccc 30px, transparent 30px);
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                transparent 29px, 
+                #ccc 29px, 
+                #ccc 30px
+            );
             background-size: 100% 30px;
-            pointer-events: none;
+            line-height: 30px;
         }
 
         .lined-page[contenteditable="true"] {
@@ -1053,12 +1109,21 @@
             <!-- Cover Design Tab -->
             <div class="tab-content active" id="cover-tab">
                 <div class="cover-design">
-                    <div class="cover-preview">
-                        <h3>Prévia da Capa</h3>
-                        <div class="book-cover size-14x21" id="book-cover-preview">
-                            <div class="book-title" id="preview-title">Título do Livro</div>
-                            <div class="book-author" id="preview-author">Autor</div>
-                            <!-- Elementos decorativos serão adicionados aqui via JavaScript -->
+                    <div class="cover-preview-container">
+                        <div class="cover-preview">
+                            <h3>Prévia da Capa (Frente)</h3>
+                            <div class="book-cover size-14x21" id="book-cover-preview">
+                                <div class="book-title" id="preview-title">Título do Livro</div>
+                                <div class="book-author" id="preview-author">Autor</div>
+                                <!-- Elementos decorativos serão adicionados aqui via JavaScript -->
+                            </div>
+                        </div>
+                        <div class="cover-preview">
+                            <h3>Prévia da Contracapa</h3>
+                            <div class="book-cover size-14x21" id="back-cover-preview">
+                                <div class="back-cover-text" id="preview-back-text">Texto da contracapa...</div>
+                                <!-- Elementos decorativos serão adicionados aqui via JavaScript -->
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="book-size">Tamanho do Livro</label>
@@ -1071,24 +1136,172 @@
                         </div>
                     </div>
                     <div class="cover-controls">
-                        <div class="toggle-group">
-                            <div class="toggle-option active" id="show-text">Com Texto</div>
-                            <div class="toggle-option" id="hide-text">Apenas Imagem</div>
+                        <div class="cover-tabs">
+                            <div class="cover-tab active" data-cover="front">Capa Frontal</div>
+                            <div class="cover-tab" data-cover="back">Contracapa</div>
                         </div>
-                        
-                        <div id="text-controls">
+
+                        <!-- Controles da Capa Frontal -->
+                        <div class="cover-tab-content active" id="front-cover-controls">
+                            <div class="toggle-group">
+                                <div class="toggle-option active" id="show-text">Com Texto</div>
+                                <div class="toggle-option" id="hide-text">Apenas Imagem</div>
+                            </div>
+                            
+                            <div id="text-controls">
+                                <div class="form-group">
+                                    <label for="book-title">Título do Livro</label>
+                                    <input type="text" id="book-title" class="form-control" placeholder="Digite o título do livro" maxlength="50">
+                                    <small id="title-counter">0/50 caracteres</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-author">Autor</label>
+                                    <input type="text" id="book-author" class="form-control" placeholder="Digite o nome do autor" maxlength="30">
+                                    <small id="author-counter">0/30 caracteres</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fonte do Título</label>
+                                    <div class="font-selector">
+                                        <div class="font-option active" data-font="Georgia">Georgia</div>
+                                        <div class="font-option" data-font="Times New Roman">Times New Roman</div>
+                                        <div class="font-option" data-font="Arial">Arial</div>
+                                        <div class="font-option" data-font="Helvetica">Helvetica</div>
+                                        <div class="font-option" data-font="Verdana">Verdana</div>
+                                        <div class="font-option" data-font="Courier New">Courier New</div>
+                                        <div class="font-option" data-font="Garamond">Garamond</div>
+                                        <div class="font-option" data-font="Palatino">Palatino</div>
+                                        <div class="font-option" data-font="Bookman">Bookman</div>
+                                        <div class="font-option" data-font="Comic Sans MS">Comic Sans</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title-font-size">Tamanho da Fonte do Título</label>
+                                    <input type="range" id="title-font-size" min="16" max="48" value="32" class="form-control">
+                                    <div id="title-font-size-value">32px</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title-color">Cor do Título</label>
+                                    <input type="color" id="title-color" value="#3E2723" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="author-font-size">Tamanho da Fonte do Autor</label>
+                                    <input type="range" id="author-font-size" min="12" max="24" value="16" class="form-control">
+                                    <div id="author-font-size-value">16px</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="author-color">Cor do Autor</label>
+                                    <input type="color" id="author-color" value="#5D4037" class="form-control">
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
-                                <label for="book-title">Título do Livro</label>
-                                <input type="text" id="book-title" class="form-control" placeholder="Digite o título do livro" maxlength="50">
-                                <small id="title-counter">0/50 caracteres</small>
+                                <label>Cor da Capa</label>
+                                <div class="color-picker">
+                                    <!-- 60 cores diferentes para a capa -->
+                                    <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
+                                    <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
+                                    <div class="color-option" style="background-color: #CD853F;" data-color="#CD853F"></div>
+                                    <div class="color-option" style="background-color: #D2691E;" data-color="#D2691E"></div>
+                                    <div class="color-option" style="background-color: #B8860B;" data-color="#B8860B"></div>
+                                    <div class="color-option" style="background-color: #8B7355;" data-color="#8B7355"></div>
+                                    <div class="color-option" style="background-color: #BC8F8F;" data-color="#BC8F8F"></div>
+                                    <div class="color-option" style="background-color: #F4A460;" data-color="#F4A460"></div>
+                                    <div class="color-option" style="background-color: #DEB887;" data-color="#DEB887"></div>
+                                    <div class="color-option" style="background-color: #DAA520;" data-color="#DAA520"></div>
+                                    <div class="color-option" style="background-color: #BDB76B;" data-color="#BDB76B"></div>
+                                    <div class="color-option" style="background-color: #8FBC8F;" data-color="#8FBC8F"></div>
+                                    <div class="color-option" style="background-color: #2F4F4F;" data-color="#2F4F4F"></div>
+                                    <div class="color-option" style="background-color: #696969;" data-color="#696969"></div>
+                                    <div class="color-option" style="background-color: #778899;" data-color="#778899"></div>
+                                    <div class="color-option" style="background-color: #708090;" data-color="#708090"></div>
+                                    <div class="color-option" style="background-color: #4682B4;" data-color="#4682B4"></div>
+                                    <div class="color-option" style="background-color: #5F9EA0;" data-color="#5F9EA0"></div>
+                                    <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
+                                    <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
+                                    <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
+                                    <div class="color-option" style="background-color: #8B008B;" data-color="#8B008B"></div>
+                                    <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
+                                    <div class="color-option" style="background-color: #8B0000;" data-color="#8B0000"></div>
+                                    <div class="color-option" style="background-color: #B22222;" data-color="#B22222"></div>
+                                    <div class="color-option" style="background-color: #DC143C;" data-color="#DC143C"></div>
+                                    <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
+                                    <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
+                                    <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
+                                    <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                    <!-- Mais cores -->
+                                    <div class="color-option" style="background-color: #FF69B4;" data-color="#FF69B4"></div>
+                                    <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
+                                    <div class="color-option" style="background-color: #C71585;" data-color="#C71585"></div>
+                                    <div class="color-option" style="background-color: #DB7093;" data-color="#DB7093"></div>
+                                    <div class="color-option" style="background-color: #FFB6C1;" data-color="#FFB6C1"></div>
+                                    <div class="color-option" style="background-color: #FFA07A;" data-color="#FFA07A"></div>
+                                    <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
+                                    <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
+                                    <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
+                                    <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
+                                    <div class="color-option" style="background-color: #FFA500;" data-color="#FFA500"></div>
+                                    <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                    <div class="color-option" style="background-color: #FFFF00;" data-color="#FFFF00"></div>
+                                    <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
+                                    <div class="color-option" style="background-color: #7CFC00;" data-color="#7CFC00"></div>
+                                    <div class="color-option" style="background-color: #00FF00;" data-color="#00FF00"></div>
+                                    <div class="color-option" style="background-color: #32CD32;" data-color="#32CD32"></div>
+                                    <div class="color-option" style="background-color: #9ACD32;" data-color="#9ACD32"></div>
+                                    <div class="color-option" style="background-color: #00FA9A;" data-color="#00FA9A"></div>
+                                    <div class="color-option" style="background-color: #40E0D0;" data-color="#40E0D0"></div>
+                                    <div class="color-option" style="background-color: #00CED1;" data-color="#00CED1"></div>
+                                    <div class="color-option" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
+                                    <div class="color-option" style="background-color: #6495ED;" data-color="#6495ED"></div>
+                                    <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
+                                    <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
+                                    <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
+                                    <div class="color-option" style="background-color: #8A2BE2;" data-color="#8A2BE2"></div>
+                                    <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
+                                    <div class="color-option" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+                                    <div class="color-option" style="background-color: #DA70D6;" data-color="#DA70D6"></div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="book-author">Autor</label>
-                                <input type="text" id="book-author" class="form-control" placeholder="Digite o nome do autor" maxlength="30">
-                                <small id="author-counter">0/30 caracteres</small>
+                                <label>Elementos Decorativos</label>
+                                <div class="decoration-elements">
+                                    <div class="decoration-element" data-element="border">
+                                        <i class="fas fa-border-all"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="flower">
+                                        <i class="fas fa-feather-alt"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="star">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="heart">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="leaf">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="crown">
+                                        <i class="fas fa-crown"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label>Fonte do Título</label>
+                                <label for="cover-image">Imagem de Capa (opcional)</label>
+                                <input type="file" id="cover-image" class="form-control" accept="image/*">
+                                <div class="image-controls">
+                                    <button class="remove-image" id="remove-cover-image" style="display: none;">Remover Imagem</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controles da Contracapa -->
+                        <div class="cover-tab-content" id="back-cover-controls">
+                            <div class="form-group">
+                                <label for="back-cover-text">Texto da Contracapa</label>
+                                <textarea id="back-cover-text" class="form-control" placeholder="Digite o texto para a contracapa (sinopse, biografia, etc.)" rows="5" maxlength="500"></textarea>
+                                <small id="back-text-counter">0/500 caracteres</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Fonte do Texto</label>
                                 <div class="font-selector">
                                     <div class="font-option active" data-font="Georgia">Georgia</div>
                                     <div class="font-option" data-font="Times New Roman">Times New Roman</div>
@@ -1097,125 +1310,41 @@
                                     <div class="font-option" data-font="Verdana">Verdana</div>
                                     <div class="font-option" data-font="Courier New">Courier New</div>
                                     <div class="font-option" data-font="Garamond">Garamond</div>
-                                    <div class="font-option" data-font="Palatino">Palatino</div>
-                                    <div class="font-option" data-font="Bookman">Bookman</div>
-                                    <div class="font-option" data-font="Comic Sans MS">Comic Sans</div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="title-font-size">Tamanho da Fonte do Título</label>
-                                <input type="range" id="title-font-size" min="16" max="48" value="32" class="form-control">
-                                <div id="title-font-size-value">32px</div>
+                                <label for="back-text-font-size">Tamanho da Fonte</label>
+                                <input type="range" id="back-text-font-size" min="12" max="24" value="16" class="form-control">
+                                <div id="back-text-font-size-value">16px</div>
                             </div>
                             <div class="form-group">
-                                <label for="title-color">Cor do Título</label>
-                                <input type="color" id="title-color" value="#3E2723" class="form-control">
+                                <label for="back-text-color">Cor do Texto</label>
+                                <input type="color" id="back-text-color" value="#3E2723" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="author-font-size">Tamanho da Fonte do Autor</label>
-                                <input type="range" id="author-font-size" min="12" max="24" value="16" class="form-control">
-                                <div id="author-font-size-value">16px</div>
+                                <label>Cor da Contracapa</label>
+                                <div class="color-picker" id="back-cover-color-picker">
+                                    <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
+                                    <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
+                                    <div class="color-option" style="background-color: #CD853F;" data-color="#CD853F"></div>
+                                    <div class="color-option" style="background-color: #D2691E;" data-color="#D2691E"></div>
+                                    <div class="color-option" style="background-color: #B8860B;" data-color="#B8860B"></div>
+                                    <div class="color-option" style="background-color: #8B7355;" data-color="#8B7355"></div>
+                                    <div class="color-option" style="background-color: #BC8F8F;" data-color="#BC8F8F"></div>
+                                    <div class="color-option" style="background-color: #F4A460;" data-color="#F4A460"></div>
+                                    <div class="color-option" style="background-color: #DEB887;" data-color="#DEB887"></div>
+                                    <div class="color-option" style="background-color: #DAA520;" data-color="#DAA520"></div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="author-color">Cor do Autor</label>
-                                <input type="color" id="author-color" value="#5D4037" class="form-control">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Cor da Capa</label>
-                            <div class="color-picker">
-                                <!-- 60 cores diferentes para a capa -->
-                                <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
-                                <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
-                                <div class="color-option" style="background-color: #CD853F;" data-color="#CD853F"></div>
-                                <div class="color-option" style="background-color: #D2691E;" data-color="#D2691E"></div>
-                                <div class="color-option" style="background-color: #B8860B;" data-color="#B8860B"></div>
-                                <div class="color-option" style="background-color: #8B7355;" data-color="#8B7355"></div>
-                                <div class="color-option" style="background-color: #BC8F8F;" data-color="#BC8F8F"></div>
-                                <div class="color-option" style="background-color: #F4A460;" data-color="#F4A460"></div>
-                                <div class="color-option" style="background-color: #DEB887;" data-color="#DEB887"></div>
-                                <div class="color-option" style="background-color: #DAA520;" data-color="#DAA520"></div>
-                                <div class="color-option" style="background-color: #BDB76B;" data-color="#BDB76B"></div>
-                                <div class="color-option" style="background-color: #8FBC8F;" data-color="#8FBC8F"></div>
-                                <div class="color-option" style="background-color: #2F4F4F;" data-color="#2F4F4F"></div>
-                                <div class="color-option" style="background-color: #696969;" data-color="#696969"></div>
-                                <div class="color-option" style="background-color: #778899;" data-color="#778899"></div>
-                                <div class="color-option" style="background-color: #708090;" data-color="#708090"></div>
-                                <div class="color-option" style="background-color: #4682B4;" data-color="#4682B4"></div>
-                                <div class="color-option" style="background-color: #5F9EA0;" data-color="#5F9EA0"></div>
-                                <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
-                                <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
-                                <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
-                                <div class="color-option" style="background-color: #8B008B;" data-color="#8B008B"></div>
-                                <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
-                                <div class="color-option" style="background-color: #8B0000;" data-color="#8B0000"></div>
-                                <div class="color-option" style="background-color: #B22222;" data-color="#B22222"></div>
-                                <div class="color-option" style="background-color: #DC143C;" data-color="#DC143C"></div>
-                                <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
-                                <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
-                                <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
-                                <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
-                                <!-- Mais cores -->
-                                <div class="color-option" style="background-color: #FF69B4;" data-color="#FF69B4"></div>
-                                <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
-                                <div class="color-option" style="background-color: #C71585;" data-color="#C71585"></div>
-                                <div class="color-option" style="background-color: #DB7093;" data-color="#DB7093"></div>
-                                <div class="color-option" style="background-color: #FFB6C1;" data-color="#FFB6C1"></div>
-                                <div class="color-option" style="background-color: #FFA07A;" data-color="#FFA07A"></div>
-                                <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
-                                <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
-                                <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
-                                <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
-                                <div class="color-option" style="background-color: #FFA500;" data-color="#FFA500"></div>
-                                <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
-                                <div class="color-option" style="background-color: #FFFF00;" data-color="#FFFF00"></div>
-                                <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
-                                <div class="color-option" style="background-color: #7CFC00;" data-color="#7CFC00"></div>
-                                <div class="color-option" style="background-color: #00FF00;" data-color="#00FF00"></div>
-                                <div class="color-option" style="background-color: #32CD32;" data-color="#32CD32"></div>
-                                <div class="color-option" style="background-color: #9ACD32;" data-color="#9ACD32"></div>
-                                <div class="color-option" style="background-color: #00FA9A;" data-color="#00FA9A"></div>
-                                <div class="color-option" style="background-color: #40E0D0;" data-color="#40E0D0"></div>
-                                <div class="color-option" style="background-color: #00CED1;" data-color="#00CED1"></div>
-                                <div class="color-option" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
-                                <div class="color-option" style="background-color: #6495ED;" data-color="#6495ED"></div>
-                                <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
-                                <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
-                                <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
-                                <div class="color-option" style="background-color: #8A2BE2;" data-color="#8A2BE2"></div>
-                                <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
-                                <div class="color-option" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
-                                <div class="color-option" style="background-color: #DA70D6;" data-color="#DA70D6"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Elementos Decorativos</label>
-                            <div class="decoration-elements">
-                                <div class="decoration-element" data-element="border">
-                                    <i class="fas fa-border-all"></i>
-                                </div>
-                                <div class="decoration-element" data-element="flower">
-                                    <i class="fas fa-feather-alt"></i>
-                                </div>
-                                <div class="decoration-element" data-element="star">
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <div class="decoration-element" data-element="heart">
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                                <div class="decoration-element" data-element="leaf">
-                                    <i class="fas fa-leaf"></i>
-                                </div>
-                                <div class="decoration-element" data-element="crown">
-                                    <i class="fas fa-crown"></i>
+                                <label for="back-cover-image">Imagem de Contracapa (opcional)</label>
+                                <input type="file" id="back-cover-image" class="form-control" accept="image/*">
+                                <div class="image-controls">
+                                    <button class="remove-image" id="remove-back-cover-image" style="display: none;">Remover Imagem</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="cover-image">Imagem de Capa (opcional)</label>
-                            <input type="file" id="cover-image" class="form-control" accept="image/*">
-                        </div>
+
                         <button class="btn" id="next-to-content">Próximo →</button>
                     </div>
                 </div>
@@ -1462,30 +1591,55 @@
             });
         });
 
+        // Cover Tabs Navigation
+        document.querySelectorAll('.cover-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all cover tabs and contents
+                document.querySelectorAll('.cover-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.cover-tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked cover tab and corresponding content
+                tab.classList.add('active');
+                const coverType = tab.getAttribute('data-cover');
+                document.getElementById(`${coverType}-cover-controls`).classList.add('active');
+            });
+        });
+
         // Cover Customization
         const bookTitleInput = document.getElementById('book-title');
         const bookAuthorInput = document.getElementById('book-author');
         const previewTitle = document.getElementById('preview-title');
         const previewAuthor = document.getElementById('preview-author');
         const bookCoverPreview = document.getElementById('book-cover-preview');
+        const backCoverPreview = document.getElementById('back-cover-preview');
+        const backCoverTextInput = document.getElementById('back-cover-text');
+        const previewBackText = document.getElementById('preview-back-text');
         const colorOptions = document.querySelectorAll('.color-option');
+        const backColorOptions = document.querySelectorAll('#back-cover-color-picker .color-option');
         const fontOptions = document.querySelectorAll('.font-option');
         const sizeOptions = document.querySelectorAll('.size-option');
         const titleFontSizeSlider = document.getElementById('title-font-size');
         const titleFontSizeValue = document.getElementById('title-font-size-value');
         const authorFontSizeSlider = document.getElementById('author-font-size');
         const authorFontSizeValue = document.getElementById('author-font-size-value');
+        const backTextFontSizeSlider = document.getElementById('back-text-font-size');
+        const backTextFontSizeValue = document.getElementById('back-text-font-size-value');
         const titleColorPicker = document.getElementById('title-color');
         const authorColorPicker = document.getElementById('author-color');
+        const backTextColorPicker = document.getElementById('back-text-color');
         const decorationElements = document.querySelectorAll('.decoration-element');
         const coverImageInput = document.getElementById('cover-image');
+        const backCoverImageInput = document.getElementById('back-cover-image');
+        const removeCoverImageBtn = document.getElementById('remove-cover-image');
+        const removeBackCoverImageBtn = document.getElementById('remove-back-cover-image');
         const showTextOption = document.getElementById('show-text');
         const hideTextOption = document.getElementById('hide-text');
         const textControls = document.getElementById('text-controls');
         const titleCounter = document.getElementById('title-counter');
         const authorCounter = document.getElementById('author-counter');
+        const backTextCounter = document.getElementById('back-text-counter');
 
-        // Limite de caracteres para título e autor
+        // Limite de caracteres para título, autor e texto da contracapa
         bookTitleInput.addEventListener('input', () => {
             const title = bookTitleInput.value || 'Título do Livro';
             previewTitle.textContent = title;
@@ -1499,6 +1653,12 @@
             const author = bookAuthorInput.value || 'Autor';
             previewAuthor.textContent = author;
             authorCounter.textContent = `${author.length}/30 caracteres`;
+        });
+
+        backCoverTextInput.addEventListener('input', () => {
+            const text = backCoverTextInput.value || 'Texto da contracapa...';
+            previewBackText.textContent = text;
+            backTextCounter.textContent = `${text.length}/500 caracteres`;
         });
 
         // Função para ajustar o tamanho da fonte do título automaticamente
@@ -1518,11 +1678,21 @@
             titleFontSizeValue.textContent = `${fontSize}px`;
         }
 
+        // Controles de cor para a capa frontal
         colorOptions.forEach(option => {
             option.addEventListener('click', () => {
                 colorOptions.forEach(o => o.classList.remove('active'));
                 option.classList.add('active');
                 bookCoverPreview.style.backgroundColor = option.getAttribute('data-color');
+            });
+        });
+
+        // Controles de cor para a contracapa
+        backColorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                backColorOptions.forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                backCoverPreview.style.backgroundColor = option.getAttribute('data-color');
             });
         });
 
@@ -1532,6 +1702,7 @@
                 option.classList.add('active');
                 previewTitle.style.fontFamily = option.getAttribute('data-font');
                 previewAuthor.style.fontFamily = option.getAttribute('data-font');
+                previewBackText.style.fontFamily = option.getAttribute('data-font');
             });
         });
 
@@ -1542,8 +1713,10 @@
                 
                 // Remove todas as classes de tamanho
                 bookCoverPreview.classList.remove('size-14x21', 'size-16x23', 'size-A5', 'size-A4');
+                backCoverPreview.classList.remove('size-14x21', 'size-16x23', 'size-A5', 'size-A4');
                 // Adiciona a classe do tamanho selecionado
                 bookCoverPreview.classList.add(`size-${option.getAttribute('data-size')}`);
+                backCoverPreview.classList.add(`size-${option.getAttribute('data-size')}`);
             });
         });
 
@@ -1559,6 +1732,12 @@
             previewAuthor.style.fontSize = `${size}px`;
         });
 
+        backTextFontSizeSlider.addEventListener('input', () => {
+            const size = backTextFontSizeSlider.value;
+            backTextFontSizeValue.textContent = `${size}px`;
+            previewBackText.style.fontSize = `${size}px`;
+        });
+
         titleColorPicker.addEventListener('input', () => {
             previewTitle.style.color = titleColorPicker.value;
         });
@@ -1567,28 +1746,42 @@
             previewAuthor.style.color = authorColorPicker.value;
         });
 
+        backTextColorPicker.addEventListener('input', () => {
+            previewBackText.style.color = backTextColorPicker.value;
+        });
+
         // Elementos decorativos
         let activeDecorations = [];
+        let activeBackDecorations = [];
 
         decorationElements.forEach(element => {
             element.addEventListener('click', () => {
                 const elementType = element.getAttribute('data-element');
+                const activeCoverTab = document.querySelector('.cover-tab.active').getAttribute('data-cover');
                 
                 // Alterna a classe active
                 element.classList.toggle('active');
                 
-                // Adiciona ou remove o elemento decorativo
+                // Adiciona ou remove o elemento decorativo na capa ativa
                 if (element.classList.contains('active')) {
-                    addDecoration(elementType);
+                    if (activeCoverTab === 'front') {
+                        addDecoration(elementType, bookCoverPreview, activeDecorations);
+                    } else {
+                        addDecoration(elementType, backCoverPreview, activeBackDecorations);
+                    }
                 } else {
-                    removeDecoration(elementType);
+                    if (activeCoverTab === 'front') {
+                        removeDecoration(elementType, activeDecorations, bookCoverPreview);
+                    } else {
+                        removeDecoration(elementType, activeBackDecorations, backCoverPreview);
+                    }
                 }
             });
         });
 
-        function addDecoration(type) {
+        function addDecoration(type, coverElement, decorationsArray) {
             // Remove decoração existente do mesmo tipo
-            removeDecoration(type);
+            removeDecoration(type, decorationsArray, coverElement);
             
             const decoration = document.createElement('div');
             decoration.className = `cover-decoration decoration-${type}`;
@@ -1622,21 +1815,21 @@
                 decoration.style.top = `${randomY}%`;
             }
             
-            bookCoverPreview.appendChild(decoration);
-            activeDecorations.push({type, element: decoration});
+            coverElement.appendChild(decoration);
+            decorationsArray.push({type, element: decoration});
         }
 
-        function removeDecoration(type) {
-            activeDecorations = activeDecorations.filter(item => {
-                if (item.type === type) {
-                    bookCoverPreview.removeChild(item.element);
-                    return false;
+        function removeDecoration(type, decorationsArray, coverElement) {
+            for (let i = 0; i < decorationsArray.length; i++) {
+                if (decorationsArray[i].type === type) {
+                    coverElement.removeChild(decorationsArray[i].element);
+                    decorationsArray.splice(i, 1);
+                    break;
                 }
-                return true;
-            });
+            }
         }
 
-        // Upload de imagem de capa
+        // Upload de imagem de capa frontal
         coverImageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1645,12 +1838,42 @@
                     bookCoverPreview.style.backgroundImage = `url(${event.target.result})`;
                     bookCoverPreview.style.backgroundSize = 'cover';
                     bookCoverPreview.style.backgroundPosition = 'center';
+                    removeCoverImageBtn.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        // Alternar entre mostrar texto ou apenas imagem
+        // Remover imagem da capa frontal
+        removeCoverImageBtn.addEventListener('click', () => {
+            bookCoverPreview.style.backgroundImage = 'none';
+            coverImageInput.value = '';
+            removeCoverImageBtn.style.display = 'none';
+        });
+
+        // Upload de imagem da contracapa
+        backCoverImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    backCoverPreview.style.backgroundImage = `url(${event.target.result})`;
+                    backCoverPreview.style.backgroundSize = 'cover';
+                    backCoverPreview.style.backgroundPosition = 'center';
+                    removeBackCoverImageBtn.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remover imagem da contracapa
+        removeBackCoverImageBtn.addEventListener('click', () => {
+            backCoverPreview.style.backgroundImage = 'none';
+            backCoverImageInput.value = '';
+            removeBackCoverImageBtn.style.display = 'none';
+        });
+
+        // Alternar entre mostrar texto ou apenas imagem (capa frontal)
         showTextOption.addEventListener('click', () => {
             showTextOption.classList.add('active');
             hideTextOption.classList.remove('active');
@@ -2168,6 +2391,7 @@
         // Inicializar contadores de caracteres
         titleCounter.textContent = `0/50 caracteres`;
         authorCounter.textContent = `0/30 caracteres`;
+        backTextCounter.textContent = `0/500 caracteres`;
     </script>
 </body>
 </html>
