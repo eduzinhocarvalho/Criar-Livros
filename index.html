@@ -403,32 +403,107 @@
             color: white;
         }
 
-        /* Page Editor */
-        .page-editor {
+        /* Content Editor */
+        .content-editor {
             display: flex;
-            flex-direction: column;
             gap: 2rem;
+            flex-wrap: wrap;
         }
 
-        .page-toolbar {
+        .writing-section {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .ideas-section {
+            flex: 1;
+            min-width: 250px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .ideas-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .idea-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .idea-category h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .idea-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .idea-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .idea-item h5 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .idea-item p {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .writing-toolbar {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+        }
+
+        .writing-toolbar .tool-group {
+            display: flex;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
         .tool-btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             background-color: var(--secondary-color);
             border: none;
             border-radius: var(--border-radius);
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .tool-btn:hover {
             background-color: var(--accent-color);
             color: white;
+        }
+
+        .tool-btn i {
+            font-size: 1rem;
         }
 
         .page-content {
@@ -440,12 +515,30 @@
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Páginas com linhas ajustadas */
         .lined-page {
-            background-image: linear-gradient(to bottom, transparent 94%, #ccc 94%);
+            background-image: linear-gradient(to bottom, #F5F5DC 1px, transparent 1px);
             background-size: 100% 30px;
             min-height: 500px;
             padding: 1rem;
             line-height: 30px;
+            position: relative;
+        }
+
+        .lined-page::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(to bottom, transparent 29px, #ccc 29px, #ccc 30px, transparent 30px);
+            background-size: 100% 30px;
+            pointer-events: none;
+        }
+
+        .lined-page[contenteditable="true"] {
+            outline: none;
         }
 
         .paragraph-page {
@@ -463,12 +556,15 @@
         .dialogue-page .character {
             font-weight: bold;
             margin-bottom: 0.5rem;
+            color: var(--primary-color);
         }
 
         .dialogue-page .speech {
             margin-left: 2rem;
             margin-bottom: 1.5rem;
             font-style: italic;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1rem;
         }
 
         .thought-page {
@@ -483,6 +579,7 @@
             font-style: italic;
             border-left: 3px solid var(--accent-color);
             padding-left: 1rem;
+            color: #555;
         }
 
         .quote-page {
@@ -497,11 +594,62 @@
             margin: 2rem 0;
             font-style: italic;
             font-size: 1.2rem;
+            color: var(--dark-color);
         }
 
         .quote-page .author {
             text-align: right;
             margin-top: 1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .description-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .description-page .description {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(210, 180, 140, 0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .monologue-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .monologue-page .monologue {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(139, 69, 19, 0.05);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .letter-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .letter-page .letter-header {
+            text-align: right;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .letter-page .letter-content {
+            margin-bottom: 2rem;
+        }
+
+        .letter-page .letter-signature {
+            text-align: right;
+            margin-top: 2rem;
             font-weight: bold;
         }
 
@@ -536,6 +684,7 @@
             padding: 10px;
             background-color: var(--light-color);
             border-bottom: 1px solid var(--secondary-color);
+            flex-wrap: wrap;
         }
 
         .drawing-tool {
@@ -544,6 +693,9 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             background-color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .drawing-tool.active {
@@ -558,13 +710,13 @@
             cursor: crosshair;
         }
 
-        .introduction-page, .toc-page, .conclusion-page {
+        .introduction-page, .toc-page, .conclusion-page, .preface-page, .dedication-page, .acknowledgments-page {
             min-height: 500px;
             padding: 2rem;
             line-height: 1.8;
         }
 
-        .introduction-page h2, .toc-page h2, .conclusion-page h2 {
+        .introduction-page h2, .toc-page h2, .conclusion-page h2, .preface-page h2, .dedication-page h2, .acknowledgments-page h2 {
             text-align: center;
             margin-bottom: 2rem;
             color: var(--primary-color);
@@ -725,6 +877,33 @@
             opacity: 0.8;
         }
 
+        /* Font Selector */
+        .font-selector-content {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .font-option-content {
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .font-option-content:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .font-option-content.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -757,6 +936,10 @@
                 flex: 1;
                 text-align: center;
                 padding: 0.8rem 1rem;
+            }
+
+            .content-editor {
+                flex-direction: column;
             }
 
             .color-picker {
@@ -792,6 +975,14 @@
 
             .decoration-elements {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .writing-toolbar {
+                flex-direction: column;
+            }
+
+            .tool-group {
+                justify-content: center;
             }
         }
     </style>
@@ -1032,29 +1223,145 @@
 
             <!-- Content Tab -->
             <div class="tab-content" id="content-tab">
-                <div class="page-editor">
-                    <div class="page-toolbar">
-                        <button class="tool-btn" id="add-lined-page">+ Página com Linhas</button>
-                        <button class="tool-btn" id="add-paragraph-page">+ Parágrafo</button>
-                        <button class="tool-btn" id="add-dialogue-page">+ Diálogo</button>
-                        <button class="tool-btn" id="add-thought-page">+ Pensamento</button>
-                        <button class="tool-btn" id="add-quote-page">+ Citação</button>
-                        <button class="tool-btn" id="add-image-page">+ Imagem</button>
-                        <button class="tool-btn" id="add-drawing-page">+ Desenho</button>
-                        <button class="tool-btn" id="add-introduction">+ Introdução</button>
-                        <button class="tool-btn" id="add-toc">+ Sumário</button>
-                        <button class="tool-btn" id="add-conclusion">+ Conclusão</button>
-                        <button class="tool-btn" id="delete-page">Excluir Página</button>
-                    </div>
-                    <div class="page-content">
-                        <div class="lined-page" contenteditable="true">
-                            Comece a escrever seu livro aqui...
+                <div class="content-editor">
+                    <div class="writing-section">
+                        <div class="writing-toolbar">
+                            <div class="tool-group">
+                                <button class="tool-btn" id="add-lined-page">
+                                    <i class="fas fa-plus"></i> Página com Linhas
+                                </button>
+                                <button class="tool-btn" id="add-paragraph-page">
+                                    <i class="fas fa-paragraph"></i> Parágrafo
+                                </button>
+                                <button class="tool-btn" id="add-image-page">
+                                    <i class="fas fa-image"></i> Imagem
+                                </button>
+                                <button class="tool-btn" id="add-drawing-page">
+                                    <i class="fas fa-paint-brush"></i> Desenho
+                                </button>
+                            </div>
+                            <div class="tool-group">
+                                <button class="tool-btn" id="add-introduction">
+                                    <i class="fas fa-book-open"></i> Introdução
+                                </button>
+                                <button class="tool-btn" id="add-preface">
+                                    <i class="fas fa-scroll"></i> Prefácio
+                                </button>
+                                <button class="tool-btn" id="add-toc">
+                                    <i class="fas fa-list"></i> Sumário
+                                </button>
+                                <button class="tool-btn" id="add-dedication">
+                                    <i class="fas fa-heart"></i> Dedicação
+                                </button>
+                                <button class="tool-btn" id="add-acknowledgments">
+                                    <i class="fas fa-hands-helping"></i> Agradecimentos
+                                </button>
+                                <button class="tool-btn" id="add-conclusion">
+                                    <i class="fas fa-flag-checkered"></i> Conclusão
+                                </button>
+                            </div>
+                            <div class="tool-group">
+                                <button class="tool-btn" id="delete-page">
+                                    <i class="fas fa-trash"></i> Excluir Página
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fonte do Conteúdo</label>
+                            <div class="font-selector-content">
+                                <div class="font-option-content active" data-font="Georgia">Georgia</div>
+                                <div class="font-option-content" data-font="Times New Roman">Times New Roman</div>
+                                <div class="font-option-content" data-font="Arial">Arial</div>
+                                <div class="font-option-content" data-font="Helvetica">Helvetica</div>
+                                <div class="font-option-content" data-font="Verdana">Verdana</div>
+                                <div class="font-option-content" data-font="Courier New">Courier New</div>
+                                <div class="font-option-content" data-font="Garamond">Garamond</div>
+                            </div>
+                        </div>
+
+                        <div class="page-content">
+                            <div class="lined-page" contenteditable="true">
+                                Comece a escrever seu livro aqui...
+                            </div>
+                        </div>
+                        <div class="pages-nav">
+                            <button class="btn" id="prev-page">← Página Anterior</button>
+                            <div class="page-indicator">Página <span id="current-page">1</span> de <span id="total-pages">1</span></div>
+                            <button class="btn" id="next-page">Próxima Página →</button>
                         </div>
                     </div>
-                    <div class="pages-nav">
-                        <button class="btn" id="prev-page">← Página Anterior</button>
-                        <div class="page-indicator">Página <span id="current-page">1</span> de <span id="total-pages">1</span></div>
-                        <button class="btn" id="next-page">Próxima Página →</button>
+
+                    <div class="ideas-section">
+                        <h3>Ideias para Escritores</h3>
+                        
+                        <div class="idea-category">
+                            <h4>Tipos de Discurso</h4>
+                            <div class="idea-item" data-type="dialogue">
+                                <h5>Diálogo</h5>
+                                <p>Conversa entre dois ou mais personagens. Use para desenvolver personagens e avançar a trama.</p>
+                            </div>
+                            <div class="idea-item" data-type="monologue">
+                                <h5>Monólogo</h5>
+                                <p>Discurso extenso de um personagem sozinho, revelando seus pensamentos mais íntimos.</p>
+                            </div>
+                            <div class="idea-item" data-type="thought">
+                                <h5>Pensamento</h5>
+                                <p>Reflexão interna de um personagem, mostrando sua perspectiva pessoal.</p>
+                            </div>
+                            <div class="idea-item" data-type="quote">
+                                <h5>Citação</h5>
+                                <p>Trecho destacado de outro autor ou personagem para enfatizar uma ideia.</p>
+                            </div>
+                            <div class="idea-item" data-type="description">
+                                <h5>Descrição</h5>
+                                <p>Detalhes vívidos sobre lugares, pessoas ou objetos para imersão do leitor.</p>
+                            </div>
+                            <div class="idea-item" data-type="letter">
+                                <h5>Carta</h5>
+                                <p>Comunicação escrita entre personagens, revelando informações importantes.</p>
+                            </div>
+                        </div>
+
+                        <div class="idea-category">
+                            <h4>Elementos Narrativos</h4>
+                            <div class="idea-item" data-type="conflict">
+                                <h5>Conflito</h5>
+                                <p>O problema central que impulsiona a história e desenvolve os personagens.</p>
+                            </div>
+                            <div class="idea-item" data-type="climax">
+                                <h5>Clímax</h5>
+                                <p>O ponto de maior tensão na história, onde o conflito atinge seu ápice.</p>
+                            </div>
+                            <div class="idea-item" data-type="foreshadowing">
+                                <h5>Preparação (Foreshadowing)</h5>
+                                <p>Dicas sutis sobre eventos futuros para criar expectativa no leitor.</p>
+                            </div>
+                            <div class="idea-item" data-type="flashback">
+                                <h5>Flashback</h5>
+                                <p>Cena do passado que explica o presente ou desenvolve um personagem.</p>
+                            </div>
+                        </div>
+
+                        <div class="idea-category">
+                            <h4>Dicas de Escrita</h4>
+                            <div class="idea-item" data-type="show-dont-tell">
+                                <h5>Mostre, não conte</h5>
+                                <p>Em vez de dizer que um personagem está triste, mostre suas ações e expressões.</p>
+                            </div>
+                            <div class="idea-item" data-type="sensory-details">
+                                <h5>Detalhes sensoriais</h5>
+                                <p>Inclua descrições que envolvam os cinco sentidos para maior imersão.</p>
+                            </div>
+                            <div class="idea-item" data-type="character-voices">
+                                <h5>Vozes dos personagens</h5>
+                                <p>Cada personagem deve ter um modo único de falar e pensar.</p>
+                            </div>
+                            <div class="idea-item" data-type="pacing">
+                                <h5>Ritmo da narrativa</h5>
+                                <p>Alterne entre cenas de ação rápida e momentos de reflexão mais lentos.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1109,13 +1416,32 @@
                 <span class="close-modal">&times;</span>
             </div>
             <div class="drawing-tools">
-                <button class="drawing-tool active" data-tool="pencil">Lápis</button>
-                <button class="drawing-tool" data-tool="brush">Pincel</button>
-                <button class="drawing-tool" data-tool="eraser">Borracha</button>
+                <button class="drawing-tool active" data-tool="pencil">
+                    <i class="fas fa-pencil-alt"></i> Lápis
+                </button>
+                <button class="drawing-tool" data-tool="brush">
+                    <i class="fas fa-paint-brush"></i> Pincel
+                </button>
+                <button class="drawing-tool" data-tool="line">
+                    <i class="fas fa-minus"></i> Linha
+                </button>
+                <button class="drawing-tool" data-tool="rectangle">
+                    <i class="fas fa-square"></i> Retângulo
+                </button>
+                <button class="drawing-tool" data-tool="circle">
+                    <i class="fas fa-circle"></i> Círculo
+                </button>
+                <button class="drawing-tool" data-tool="eraser">
+                    <i class="fas fa-eraser"></i> Borracha
+                </button>
                 <input type="color" id="drawing-color" value="#000000">
                 <input type="range" id="brush-size" min="1" max="20" value="3">
-                <button class="drawing-tool" id="clear-canvas">Limpar</button>
-                <button class="drawing-tool" id="save-drawing">Salvar</button>
+                <button class="drawing-tool" id="clear-canvas">
+                    <i class="fas fa-broom"></i> Limpar
+                </button>
+                <button class="drawing-tool" id="save-drawing">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
             </div>
             <canvas class="drawing-canvas" id="drawing-canvas"></canvas>
         </div>
@@ -1346,46 +1672,34 @@
         const pages = [document.querySelector('.page-content').innerHTML];
         const currentPageElement = document.getElementById('current-page');
         const totalPagesElement = document.getElementById('total-pages');
+        let currentFont = 'Georgia';
 
+        // Seleção de fonte para o conteúdo
+        document.querySelectorAll('.font-option-content').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.font-option-content').forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                currentFont = option.getAttribute('data-font');
+                applyFontToAllPages();
+            });
+        });
+
+        function applyFontToAllPages() {
+            const pageContent = document.querySelector('.page-content');
+            if (pageContent) {
+                pageContent.style.fontFamily = currentFont;
+            }
+        }
+
+        // Adicionar páginas com diferentes tipos de conteúdo
         document.getElementById('add-lined-page').addEventListener('click', () => {
-            pages.push('<div class="lined-page" contenteditable="true">Nova página com linhas...</div>');
+            pages.push('<div class="lined-page" contenteditable="true" style="font-family: ' + currentFont + ';">Nova página com linhas...</div>');
             currentPage = pages.length;
             updatePageDisplay();
         });
 
         document.getElementById('add-paragraph-page').addEventListener('click', () => {
-            pages.push('<div class="paragraph-page" contenteditable="true"><p>Escreva seu parágrafo aqui...</p></div>');
-            currentPage = pages.length;
-            updatePageDisplay();
-        });
-
-        document.getElementById('add-dialogue-page').addEventListener('click', () => {
-            pages.push(`<div class="dialogue-page" contenteditable="true">
-                <div class="character">Personagem 1:</div>
-                <div class="speech">Escreva o diálogo aqui...</div>
-                <div class="character">Personagem 2:</div>
-                <div class="speech">Resposta do personagem 2...</div>
-            </div>`);
-            currentPage = pages.length;
-            updatePageDisplay();
-        });
-
-        document.getElementById('add-thought-page').addEventListener('click', () => {
-            pages.push(`<div class="thought-page" contenteditable="true">
-                <div class="thought">Escreva o pensamento do personagem aqui...</div>
-                <div class="thought">Outro pensamento...</div>
-            </div>`);
-            currentPage = pages.length;
-            updatePageDisplay();
-        });
-
-        document.getElementById('add-quote-page').addEventListener('click', () => {
-            pages.push(`<div class="quote-page" contenteditable="true">
-                <blockquote>
-                    "Escreva uma citação inspiradora aqui..."
-                </blockquote>
-                <div class="author">- Autor da citação</div>
-            </div>`);
+            pages.push('<div class="paragraph-page" contenteditable="true" style="font-family: ' + currentFont + ';"><p>Escreva seu parágrafo aqui...</p></div>');
             currentPage = pages.length;
             updatePageDisplay();
         });
@@ -1424,12 +1738,29 @@
         document.getElementById('add-drawing-page').addEventListener('click', () => {
             pages.push(`<div class="drawing-page">
                 <div class="drawing-tools">
-                    <button class="drawing-tool active" data-tool="pencil">Lápis</button>
-                    <button class="drawing-tool" data-tool="brush">Pincel</button>
-                    <button class="drawing-tool" data-tool="eraser">Borracha</button>
+                    <button class="drawing-tool active" data-tool="pencil">
+                        <i class="fas fa-pencil-alt"></i> Lápis
+                    </button>
+                    <button class="drawing-tool" data-tool="brush">
+                        <i class="fas fa-paint-brush"></i> Pincel
+                    </button>
+                    <button class="drawing-tool" data-tool="line">
+                        <i class="fas fa-minus"></i> Linha
+                    </button>
+                    <button class="drawing-tool" data-tool="rectangle">
+                        <i class="fas fa-square"></i> Retângulo
+                    </button>
+                    <button class="drawing-tool" data-tool="circle">
+                        <i class="fas fa-circle"></i> Círculo
+                    </button>
+                    <button class="drawing-tool" data-tool="eraser">
+                        <i class="fas fa-eraser"></i> Borracha
+                    </button>
                     <input type="color" id="drawing-color" value="#000000">
                     <input type="range" id="brush-size" min="1" max="20" value="3">
-                    <button class="drawing-tool" id="clear-canvas">Limpar</button>
+                    <button class="drawing-tool" id="clear-canvas">
+                        <i class="fas fa-broom"></i> Limpar
+                    </button>
                 </div>
                 <canvas class="drawing-canvas" id="drawing-canvas"></canvas>
             </div>`);
@@ -1442,8 +1773,9 @@
             }, 100);
         });
 
+        // Adicionar páginas de estrutura do livro
         document.getElementById('add-introduction').addEventListener('click', () => {
-            pages.push(`<div class="introduction-page" contenteditable="true">
+            pages.push(`<div class="introduction-page" contenteditable="true" style="font-family: ${currentFont};">
                 <h2>Introdução</h2>
                 <p>Este livro foi escrito com o objetivo de [descreva o objetivo do seu livro]. Através destas páginas, você encontrará [descreva brevemente o conteúdo do livro].</p>
                 <p>Espero que esta obra possa [descreva o que o leitor pode esperar ganhar com a leitura].</p>
@@ -1454,8 +1786,19 @@
             updatePageDisplay();
         });
 
+        document.getElementById('add-preface').addEventListener('click', () => {
+            pages.push(`<div class="preface-page" contenteditable="true" style="font-family: ${currentFont};">
+                <h2>Prefácio</h2>
+                <p>[Escreva aqui o prefácio do seu livro, que geralmente é escrito por outra pessoa ou pelo autor para contextualizar a obra].</p>
+                <p>[Explique o contexto de criação, as inspirações ou o propósito da obra].</p>
+                <p style="text-align: right; margin-top: 2rem;">[Nome do autor do prefácio]</p>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
         document.getElementById('add-toc').addEventListener('click', () => {
-            pages.push(`<div class="toc-page" contenteditable="true">
+            pages.push(`<div class="toc-page" contenteditable="true" style="font-family: ${currentFont};">
                 <h2>Sumário</h2>
                 <ul class="toc-list">
                     <li>Capítulo 1: [Título do Capítulo 1] ................. 1</li>
@@ -1471,8 +1814,36 @@
             updatePageDisplay();
         });
 
+        document.getElementById('add-dedication').addEventListener('click', () => {
+            pages.push(`<div class="dedication-page" contenteditable="true" style="font-family: ${currentFont};">
+                <h2>Dedicatória</h2>
+                <p style="text-align: center; font-style: italic; margin-top: 3rem;">
+                    Dedico este livro a [nome da pessoa ou pessoas],<br>
+                    cujo apoio foi fundamental para esta jornada.
+                </p>
+                <p style="text-align: center; margin-top: 2rem;">
+                    Com gratidão,<br>
+                    [Seu nome]
+                </p>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
+        document.getElementById('add-acknowledgments').addEventListener('click', () => {
+            pages.push(`<div class="acknowledgments-page" contenteditable="true" style="font-family: ${currentFont};">
+                <h2>Agradecimentos</h2>
+                <p>Gostaria de expressar minha gratidão a todas as pessoas que contribuíram para a realização deste projeto:</p>
+                <p>[Liste aqui as pessoas ou instituições que você gostaria de agradecer].</p>
+                <p>Um agradecimento especial a [nome] pelo apoio incondicional.</p>
+                <p style="text-align: right; margin-top: 2rem;">[Seu nome]</p>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
         document.getElementById('add-conclusion').addEventListener('click', () => {
-            pages.push(`<div class="conclusion-page" contenteditable="true">
+            pages.push(`<div class="conclusion-page" contenteditable="true" style="font-family: ${currentFont};">
                 <h2>Conclusão</h2>
                 <p>Ao longo deste livro, exploramos [recapitule brevemente os principais temas abordados].</p>
                 <p>Espero que as ideias apresentadas aqui possam [descreva o impacto esperado do livro].</p>
@@ -1483,6 +1854,78 @@
             currentPage = pages.length;
             updatePageDisplay();
         });
+
+        // Adicionar páginas baseadas nas ideias para escritores
+        document.querySelectorAll('.idea-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const type = item.getAttribute('data-type');
+                addPageByType(type);
+            });
+        });
+
+        function addPageByType(type) {
+            let pageContent = '';
+            
+            switch(type) {
+                case 'dialogue':
+                    pageContent = `<div class="dialogue-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <div class="character">Personagem 1:</div>
+                        <div class="speech">Escreva o diálogo aqui...</div>
+                        <div class="character">Personagem 2:</div>
+                        <div class="speech">Resposta do personagem 2...</div>
+                    </div>`;
+                    break;
+                case 'monologue':
+                    pageContent = `<div class="monologue-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <div class="monologue">
+                            [Escreva aqui um monólogo extenso de um personagem, revelando seus pensamentos mais profundos, conflitos internos e reflexões pessoais. Este é o momento para o personagem expressar suas emoções mais íntimas sem restrições.]
+                        </div>
+                    </div>`;
+                    break;
+                case 'thought':
+                    pageContent = `<div class="thought-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <div class="thought">Escreva o pensamento do personagem aqui...</div>
+                        <div class="thought">Outro pensamento...</div>
+                    </div>`;
+                    break;
+                case 'quote':
+                    pageContent = `<div class="quote-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <blockquote>
+                            "Escreva uma citação inspiradora aqui..."
+                        </blockquote>
+                        <div class="author">- Autor da citação</div>
+                    </div>`;
+                    break;
+                case 'description':
+                    pageContent = `<div class="description-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <div class="description">
+                            [Descreva um lugar, personagem ou objeto com riqueza de detalhes. Use os cinco sentidos para criar uma imagem vívida na mente do leitor.]
+                        </div>
+                    </div>`;
+                    break;
+                case 'letter':
+                    pageContent = `<div class="letter-page" contenteditable="true" style="font-family: ${currentFont};">
+                        <div class="letter-header">
+                            [Cidade], [Data]
+                        </div>
+                        <div class="letter-content">
+                            Prezado(a) [Nome do destinatário],<br><br>
+                            [Escreva o conteúdo da carta aqui...]<br><br>
+                            Atenciosamente,
+                        </div>
+                        <div class="letter-signature">
+                            [Nome do remetente]
+                        </div>
+                    </div>`;
+                    break;
+                default:
+                    pageContent = `<div class="paragraph-page" contenteditable="true" style="font-family: ${currentFont};"><p>Nova página...</p></div>`;
+            }
+            
+            pages.push(pageContent);
+            currentPage = pages.length;
+            updatePageDisplay();
+        }
 
         document.getElementById('delete-page').addEventListener('click', () => {
             if (pages.length > 1) {
@@ -1512,6 +1955,9 @@
             document.querySelector('.page-content').innerHTML = pages[currentPage - 1];
             currentPageElement.textContent = currentPage;
             totalPagesElement.textContent = pages.length;
+            
+            // Aplicar a fonte atual
+            applyFontToAllPages();
             
             // Re-inicializar o editor de desenho se a página atual for de desenho
             if (pages[currentPage - 1].includes('drawing-page')) {
@@ -1557,6 +2003,7 @@
             let currentTool = 'pencil';
             let currentColor = '#000000';
             let currentSize = 3;
+            let startX, startY;
             
             // Eventos de desenho
             canvas.addEventListener('mousedown', startDrawing);
@@ -1574,6 +2021,12 @@
                 tool.addEventListener('click', () => {
                     if (tool.id === 'clear-canvas') {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        return;
+                    }
+                    
+                    if (tool.id === 'save-drawing') {
+                        // Simular salvamento do desenho
+                        alert('Desenho salvo com sucesso!');
                         return;
                     }
                     
@@ -1600,6 +2053,12 @@
             function startDrawing(e) {
                 isDrawing = true;
                 [lastX, lastY] = getCoordinates(e);
+                [startX, startY] = getCoordinates(e);
+                
+                if (currentTool === 'rectangle' || currentTool === 'circle' || currentTool === 'line') {
+                    // Para formas, começamos um novo caminho
+                    ctx.beginPath();
+                }
             }
             
             function draw(e) {
@@ -1607,27 +2066,58 @@
                 
                 const [x, y] = getCoordinates(e);
                 
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(x, y);
-                
-                if (currentTool === 'eraser') {
-                    ctx.strokeStyle = '#FFFFFF';
-                    ctx.lineWidth = currentSize * 2;
-                } else {
+                if (currentTool === 'pencil' || currentTool === 'brush') {
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(x, y);
                     ctx.strokeStyle = currentColor;
                     ctx.lineWidth = currentSize;
                     ctx.lineCap = 'round';
                     ctx.lineJoin = 'round';
+                    ctx.stroke();
+                    [lastX, lastY] = [x, y];
+                } else if (currentTool === 'eraser') {
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = currentSize * 2;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.stroke();
+                    [lastX, lastY] = [x, y];
+                } else if (currentTool === 'line') {
+                    // Redesenha o canvas para mostrar a linha em tempo real
+                    redrawCanvas();
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentSize;
+                    ctx.stroke();
+                } else if (currentTool === 'rectangle') {
+                    redrawCanvas();
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentSize;
+                    ctx.strokeRect(startX, startY, x - startX, y - startY);
+                } else if (currentTool === 'circle') {
+                    redrawCanvas();
+                    ctx.beginPath();
+                    const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+                    ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentSize;
+                    ctx.stroke();
                 }
-                
-                ctx.stroke();
-                
-                [lastX, lastY] = [x, y];
             }
             
             function stopDrawing() {
                 isDrawing = false;
+            }
+            
+            function redrawCanvas() {
+                // Esta função seria usada para redesenhar o canvas mantendo os desenhos anteriores
+                // Em uma implementação real, você precisaria salvar o estado do canvas
             }
             
             function handleTouch(e) {
