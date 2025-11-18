@@ -232,6 +232,23 @@
             padding: 2rem;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .book-cover.size-14x21 {
+            height: 350px;
+        }
+
+        .book-cover.size-16x23 {
+            height: 400px;
+        }
+
+        .book-cover.size-A5 {
+            height: 370px;
+        }
+
+        .book-cover.size-A4 {
+            height: 450px;
         }
 
         .book-title {
@@ -240,11 +257,16 @@
             color: var(--text-color);
             text-align: center;
             margin-bottom: 1rem;
+            max-width: 90%;
+            word-wrap: break-word;
+            line-height: 1.2;
         }
 
         .book-author {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--dark-color);
+            max-width: 90%;
+            word-wrap: break-word;
         }
 
         .cover-controls {
@@ -343,6 +365,7 @@
             cursor: pointer;
             transition: all 0.3s;
             background-color: white;
+            position: relative;
         }
 
         .decoration-element:hover {
@@ -353,6 +376,31 @@
         .decoration-element i {
             font-size: 2rem;
             color: var(--primary-color);
+        }
+
+        .decoration-element.active {
+            background-color: var(--secondary-color);
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-option {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            flex: 1;
+        }
+
+        .toggle-option.active {
+            background-color: var(--accent-color);
+            color: white;
         }
 
         /* Page Editor */
@@ -635,6 +683,48 @@
             color: var(--dark-color);
         }
 
+        /* Elementos decorativos na capa */
+        .cover-decoration {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .decoration-border {
+            border: 3px solid currentColor;
+            width: 90%;
+            height: 90%;
+        }
+
+        .decoration-flower {
+            font-size: 3rem;
+            color: currentColor;
+            opacity: 0.7;
+        }
+
+        .decoration-star {
+            font-size: 2rem;
+            color: currentColor;
+            opacity: 0.8;
+        }
+
+        .decoration-heart {
+            font-size: 2.5rem;
+            color: currentColor;
+            opacity: 0.7;
+        }
+
+        .decoration-leaf {
+            font-size: 3rem;
+            color: currentColor;
+            opacity: 0.6;
+        }
+
+        .decoration-crown {
+            font-size: 2.5rem;
+            color: currentColor;
+            opacity: 0.8;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -774,9 +864,10 @@
                 <div class="cover-design">
                     <div class="cover-preview">
                         <h3>Prévia da Capa</h3>
-                        <div class="book-cover" id="book-cover-preview">
+                        <div class="book-cover size-14x21" id="book-cover-preview">
                             <div class="book-title" id="preview-title">Título do Livro</div>
                             <div class="book-author" id="preview-author">Autor</div>
+                            <!-- Elementos decorativos serão adicionados aqui via JavaScript -->
                         </div>
                         <div class="form-group">
                             <label for="book-size">Tamanho do Livro</label>
@@ -789,34 +880,57 @@
                         </div>
                     </div>
                     <div class="cover-controls">
-                        <div class="form-group">
-                            <label for="book-title">Título do Livro</label>
-                            <input type="text" id="book-title" class="form-control" placeholder="Digite o título do livro">
+                        <div class="toggle-group">
+                            <div class="toggle-option active" id="show-text">Com Texto</div>
+                            <div class="toggle-option" id="hide-text">Apenas Imagem</div>
                         </div>
-                        <div class="form-group">
-                            <label for="book-author">Autor</label>
-                            <input type="text" id="book-author" class="form-control" placeholder="Digite o nome do autor">
-                        </div>
-                        <div class="form-group">
-                            <label>Fonte do Título</label>
-                            <div class="font-selector">
-                                <div class="font-option active" data-font="Georgia">Georgia</div>
-                                <div class="font-option" data-font="Times New Roman">Times New Roman</div>
-                                <div class="font-option" data-font="Arial">Arial</div>
-                                <div class="font-option" data-font="Helvetica">Helvetica</div>
-                                <div class="font-option" data-font="Verdana">Verdana</div>
-                                <div class="font-option" data-font="Courier New">Courier New</div>
-                                <div class="font-option" data-font="Garamond">Garamond</div>
-                                <div class="font-option" data-font="Palatino">Palatino</div>
-                                <div class="font-option" data-font="Bookman">Bookman</div>
-                                <div class="font-option" data-font="Comic Sans MS">Comic Sans</div>
+                        
+                        <div id="text-controls">
+                            <div class="form-group">
+                                <label for="book-title">Título do Livro</label>
+                                <input type="text" id="book-title" class="form-control" placeholder="Digite o título do livro" maxlength="50">
+                                <small id="title-counter">0/50 caracteres</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-author">Autor</label>
+                                <input type="text" id="book-author" class="form-control" placeholder="Digite o nome do autor" maxlength="30">
+                                <small id="author-counter">0/30 caracteres</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Fonte do Título</label>
+                                <div class="font-selector">
+                                    <div class="font-option active" data-font="Georgia">Georgia</div>
+                                    <div class="font-option" data-font="Times New Roman">Times New Roman</div>
+                                    <div class="font-option" data-font="Arial">Arial</div>
+                                    <div class="font-option" data-font="Helvetica">Helvetica</div>
+                                    <div class="font-option" data-font="Verdana">Verdana</div>
+                                    <div class="font-option" data-font="Courier New">Courier New</div>
+                                    <div class="font-option" data-font="Garamond">Garamond</div>
+                                    <div class="font-option" data-font="Palatino">Palatino</div>
+                                    <div class="font-option" data-font="Bookman">Bookman</div>
+                                    <div class="font-option" data-font="Comic Sans MS">Comic Sans</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title-font-size">Tamanho da Fonte do Título</label>
+                                <input type="range" id="title-font-size" min="16" max="48" value="32" class="form-control">
+                                <div id="title-font-size-value">32px</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title-color">Cor do Título</label>
+                                <input type="color" id="title-color" value="#3E2723" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="author-font-size">Tamanho da Fonte do Autor</label>
+                                <input type="range" id="author-font-size" min="12" max="24" value="16" class="form-control">
+                                <div id="author-font-size-value">16px</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="author-color">Cor do Autor</label>
+                                <input type="color" id="author-color" value="#5D4037" class="form-control">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="font-size">Tamanho da Fonte</label>
-                            <input type="range" id="font-size" min="16" max="48" value="32" class="form-control">
-                            <div id="font-size-value">32px</div>
-                        </div>
+                        
                         <div class="form-group">
                             <label>Cor da Capa</label>
                             <div class="color-picker">
@@ -1031,17 +1145,52 @@
         const colorOptions = document.querySelectorAll('.color-option');
         const fontOptions = document.querySelectorAll('.font-option');
         const sizeOptions = document.querySelectorAll('.size-option');
-        const fontSizeSlider = document.getElementById('font-size');
-        const fontSizeValue = document.getElementById('font-size-value');
+        const titleFontSizeSlider = document.getElementById('title-font-size');
+        const titleFontSizeValue = document.getElementById('title-font-size-value');
+        const authorFontSizeSlider = document.getElementById('author-font-size');
+        const authorFontSizeValue = document.getElementById('author-font-size-value');
+        const titleColorPicker = document.getElementById('title-color');
+        const authorColorPicker = document.getElementById('author-color');
         const decorationElements = document.querySelectorAll('.decoration-element');
+        const coverImageInput = document.getElementById('cover-image');
+        const showTextOption = document.getElementById('show-text');
+        const hideTextOption = document.getElementById('hide-text');
+        const textControls = document.getElementById('text-controls');
+        const titleCounter = document.getElementById('title-counter');
+        const authorCounter = document.getElementById('author-counter');
 
+        // Limite de caracteres para título e autor
         bookTitleInput.addEventListener('input', () => {
-            previewTitle.textContent = bookTitleInput.value || 'Título do Livro';
+            const title = bookTitleInput.value || 'Título do Livro';
+            previewTitle.textContent = title;
+            titleCounter.textContent = `${title.length}/50 caracteres`;
+            
+            // Ajusta o tamanho da fonte automaticamente se o texto for muito longo
+            adjustTitleFontSize();
         });
 
         bookAuthorInput.addEventListener('input', () => {
-            previewAuthor.textContent = bookAuthorInput.value || 'Autor';
+            const author = bookAuthorInput.value || 'Autor';
+            previewAuthor.textContent = author;
+            authorCounter.textContent = `${author.length}/30 caracteres`;
         });
+
+        // Função para ajustar o tamanho da fonte do título automaticamente
+        function adjustTitleFontSize() {
+            const title = previewTitle.textContent;
+            const titleLength = title.length;
+            let fontSize = 32; // Tamanho base
+            
+            if (titleLength > 30) {
+                fontSize = 24;
+            } else if (titleLength > 20) {
+                fontSize = 28;
+            }
+            
+            previewTitle.style.fontSize = `${fontSize}px`;
+            titleFontSizeSlider.value = fontSize;
+            titleFontSizeValue.textContent = `${fontSize}px`;
+        }
 
         colorOptions.forEach(option => {
             option.addEventListener('click', () => {
@@ -1056,6 +1205,7 @@
                 fontOptions.forEach(o => o.classList.remove('active'));
                 option.classList.add('active');
                 previewTitle.style.fontFamily = option.getAttribute('data-font');
+                previewAuthor.style.fontFamily = option.getAttribute('data-font');
             });
         });
 
@@ -1063,22 +1213,132 @@
             option.addEventListener('click', () => {
                 sizeOptions.forEach(o => o.classList.remove('active'));
                 option.classList.add('active');
-                // Aqui você poderia ajustar o tamanho da prévia baseado no tamanho selecionado
+                
+                // Remove todas as classes de tamanho
+                bookCoverPreview.classList.remove('size-14x21', 'size-16x23', 'size-A5', 'size-A4');
+                // Adiciona a classe do tamanho selecionado
+                bookCoverPreview.classList.add(`size-${option.getAttribute('data-size')}`);
             });
         });
 
-        fontSizeSlider.addEventListener('input', () => {
-            const size = fontSizeSlider.value;
-            fontSizeValue.textContent = `${size}px`;
+        titleFontSizeSlider.addEventListener('input', () => {
+            const size = titleFontSizeSlider.value;
+            titleFontSizeValue.textContent = `${size}px`;
             previewTitle.style.fontSize = `${size}px`;
         });
+
+        authorFontSizeSlider.addEventListener('input', () => {
+            const size = authorFontSizeSlider.value;
+            authorFontSizeValue.textContent = `${size}px`;
+            previewAuthor.style.fontSize = `${size}px`;
+        });
+
+        titleColorPicker.addEventListener('input', () => {
+            previewTitle.style.color = titleColorPicker.value;
+        });
+
+        authorColorPicker.addEventListener('input', () => {
+            previewAuthor.style.color = authorColorPicker.value;
+        });
+
+        // Elementos decorativos
+        let activeDecorations = [];
 
         decorationElements.forEach(element => {
             element.addEventListener('click', () => {
                 const elementType = element.getAttribute('data-element');
-                // Aqui você implementaria a lógica para adicionar elementos decorativos à capa
-                alert(`Elemento decorativo "${elementType}" adicionado à capa!`);
+                
+                // Alterna a classe active
+                element.classList.toggle('active');
+                
+                // Adiciona ou remove o elemento decorativo
+                if (element.classList.contains('active')) {
+                    addDecoration(elementType);
+                } else {
+                    removeDecoration(elementType);
+                }
             });
+        });
+
+        function addDecoration(type) {
+            // Remove decoração existente do mesmo tipo
+            removeDecoration(type);
+            
+            const decoration = document.createElement('div');
+            decoration.className = `cover-decoration decoration-${type}`;
+            
+            switch(type) {
+                case 'border':
+                    decoration.innerHTML = '<div class="decoration-border"></div>';
+                    break;
+                case 'flower':
+                    decoration.innerHTML = '<i class="fas fa-feather-alt decoration-flower"></i>';
+                    break;
+                case 'star':
+                    decoration.innerHTML = '<i class="fas fa-star decoration-star"></i>';
+                    break;
+                case 'heart':
+                    decoration.innerHTML = '<i class="fas fa-heart decoration-heart"></i>';
+                    break;
+                case 'leaf':
+                    decoration.innerHTML = '<i class="fas fa-leaf decoration-leaf"></i>';
+                    break;
+                case 'crown':
+                    decoration.innerHTML = '<i class="fas fa-crown decoration-crown"></i>';
+                    break;
+            }
+            
+            // Posiciona aleatoriamente (exceto borda)
+            if (type !== 'border') {
+                const randomX = Math.random() * 70 + 15; // 15% a 85%
+                const randomY = Math.random() * 70 + 15; // 15% a 85%
+                decoration.style.left = `${randomX}%`;
+                decoration.style.top = `${randomY}%`;
+            }
+            
+            bookCoverPreview.appendChild(decoration);
+            activeDecorations.push({type, element: decoration});
+        }
+
+        function removeDecoration(type) {
+            activeDecorations = activeDecorations.filter(item => {
+                if (item.type === type) {
+                    bookCoverPreview.removeChild(item.element);
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        // Upload de imagem de capa
+        coverImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    bookCoverPreview.style.backgroundImage = `url(${event.target.result})`;
+                    bookCoverPreview.style.backgroundSize = 'cover';
+                    bookCoverPreview.style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Alternar entre mostrar texto ou apenas imagem
+        showTextOption.addEventListener('click', () => {
+            showTextOption.classList.add('active');
+            hideTextOption.classList.remove('active');
+            textControls.style.display = 'block';
+            previewTitle.style.display = 'block';
+            previewAuthor.style.display = 'block';
+        });
+
+        hideTextOption.addEventListener('click', () => {
+            hideTextOption.classList.add('active');
+            showTextOption.classList.remove('active');
+            textControls.style.display = 'none';
+            previewTitle.style.display = 'none';
+            previewAuthor.style.display = 'none';
         });
 
         // Page Management
@@ -1414,6 +1674,10 @@
                 drawingModal.style.display = 'none';
             }
         });
+
+        // Inicializar contadores de caracteres
+        titleCounter.textContent = `0/50 caracteres`;
+        authorCounter.textContent = `0/30 caracteres`;
     </script>
 </body>
 </html>
