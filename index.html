@@ -248,7 +248,7 @@
         }
 
         .cover-controls {
-            flex: 1;
+            flex: 2;
             min-width: 300px;
         }
 
@@ -272,9 +272,14 @@
 
         .color-picker {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
             gap: 10px;
             margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
         }
 
         .color-option {
@@ -293,6 +298,61 @@
         .color-option.active {
             border-color: var(--dark-color);
             transform: scale(1.1);
+        }
+
+        .font-selector, .size-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .font-option, .size-option {
+            padding: 10px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .font-option:hover, .size-option:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .font-option.active, .size-option.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .decoration-elements {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .decoration-element {
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: white;
+        }
+
+        .decoration-element:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+
+        .decoration-element i {
+            font-size: 2rem;
+            color: var(--primary-color);
         }
 
         /* Page Editor */
@@ -333,11 +393,68 @@
         }
 
         .lined-page {
-            background-image: linear-gradient(to bottom, transparent 95%, #ccc 95%);
+            background-image: linear-gradient(to bottom, transparent 94%, #ccc 94%);
             background-size: 100% 30px;
             min-height: 500px;
             padding: 1rem;
             line-height: 30px;
+        }
+
+        .paragraph-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .dialogue-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .dialogue-page .character {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .dialogue-page .speech {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .thought-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .thought-page .thought {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .quote-page {
+            min-height: 500px;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .quote-page blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .quote-page .author {
+            text-align: right;
+            margin-top: 1rem;
+            font-weight: bold;
         }
 
         .image-page {
@@ -355,6 +472,42 @@
             font-size: 3rem;
             color: var(--secondary-color);
             margin-bottom: 1rem;
+        }
+
+        .drawing-page {
+            min-height: 500px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drawing-tools {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background-color: var(--light-color);
+            border-bottom: 1px solid var(--secondary-color);
+        }
+
+        .drawing-tool {
+            padding: 8px 12px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .drawing-tool.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .drawing-canvas {
+            width: 100%;
+            height: 440px;
+            background-color: white;
+            cursor: crosshair;
         }
 
         .introduction-page, .toc-page, .conclusion-page {
@@ -445,6 +598,43 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -482,6 +672,14 @@
             .color-picker {
                 grid-template-columns: repeat(4, 1fr);
             }
+
+            .font-selector, .size-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .decoration-elements {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 480px) {
@@ -496,6 +694,14 @@
             .pages-nav {
                 flex-direction: column;
                 gap: 1rem;
+            }
+
+            .font-selector, .size-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .decoration-elements {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -537,14 +743,14 @@
                     <i class="fas fa-palette"></i>
                 </div>
                 <h3>Personalize a Capa</h3>
-                <p>Escolha entre 30 cores, adicione imagens e escreva o título do seu livro. Personalize também a contracapa.</p>
+                <p>Escolha entre 60 cores, adicione imagens, vetores, selecione fontes e tamanhos. Personalize também a contracapa.</p>
             </div>
             <div class="step">
                 <div class="step-icon">
                     <i class="fas fa-pencil-alt"></i>
                 </div>
                 <h3>Escreva seu Conteúdo</h3>
-                <p>Crie páginas com texto em linhas, adicione imagens ou use modelos prontos como introdução e sumário.</p>
+                <p>Crie páginas com texto, diálogos, pensamentos, citações, adicione imagens ou desenhe suas próprias ilustrações.</p>
             </div>
             <div class="step">
                 <div class="step-icon">
@@ -572,6 +778,15 @@
                             <div class="book-title" id="preview-title">Título do Livro</div>
                             <div class="book-author" id="preview-author">Autor</div>
                         </div>
+                        <div class="form-group">
+                            <label for="book-size">Tamanho do Livro</label>
+                            <div class="size-selector">
+                                <div class="size-option active" data-size="14x21">14x21 cm</div>
+                                <div class="size-option" data-size="16x23">16x23 cm</div>
+                                <div class="size-option" data-size="A5">A5</div>
+                                <div class="size-option" data-size="A4">A4</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="cover-controls">
                         <div class="form-group">
@@ -583,9 +798,29 @@
                             <input type="text" id="book-author" class="form-control" placeholder="Digite o nome do autor">
                         </div>
                         <div class="form-group">
+                            <label>Fonte do Título</label>
+                            <div class="font-selector">
+                                <div class="font-option active" data-font="Georgia">Georgia</div>
+                                <div class="font-option" data-font="Times New Roman">Times New Roman</div>
+                                <div class="font-option" data-font="Arial">Arial</div>
+                                <div class="font-option" data-font="Helvetica">Helvetica</div>
+                                <div class="font-option" data-font="Verdana">Verdana</div>
+                                <div class="font-option" data-font="Courier New">Courier New</div>
+                                <div class="font-option" data-font="Garamond">Garamond</div>
+                                <div class="font-option" data-font="Palatino">Palatino</div>
+                                <div class="font-option" data-font="Bookman">Bookman</div>
+                                <div class="font-option" data-font="Comic Sans MS">Comic Sans</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="font-size">Tamanho da Fonte</label>
+                            <input type="range" id="font-size" min="16" max="48" value="32" class="form-control">
+                            <div id="font-size-value">32px</div>
+                        </div>
+                        <div class="form-group">
                             <label>Cor da Capa</label>
                             <div class="color-picker">
-                                <!-- 30 cores diferentes para a capa -->
+                                <!-- 60 cores diferentes para a capa -->
                                 <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
                                 <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
                                 <div class="color-option" style="background-color: #CD853F;" data-color="#CD853F"></div>
@@ -616,6 +851,60 @@
                                 <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
                                 <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
                                 <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                <!-- Mais cores -->
+                                <div class="color-option" style="background-color: #FF69B4;" data-color="#FF69B4"></div>
+                                <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
+                                <div class="color-option" style="background-color: #C71585;" data-color="#C71585"></div>
+                                <div class="color-option" style="background-color: #DB7093;" data-color="#DB7093"></div>
+                                <div class="color-option" style="background-color: #FFB6C1;" data-color="#FFB6C1"></div>
+                                <div class="color-option" style="background-color: #FFA07A;" data-color="#FFA07A"></div>
+                                <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
+                                <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
+                                <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
+                                <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
+                                <div class="color-option" style="background-color: #FFA500;" data-color="#FFA500"></div>
+                                <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                <div class="color-option" style="background-color: #FFFF00;" data-color="#FFFF00"></div>
+                                <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
+                                <div class="color-option" style="background-color: #7CFC00;" data-color="#7CFC00"></div>
+                                <div class="color-option" style="background-color: #00FF00;" data-color="#00FF00"></div>
+                                <div class="color-option" style="background-color: #32CD32;" data-color="#32CD32"></div>
+                                <div class="color-option" style="background-color: #9ACD32;" data-color="#9ACD32"></div>
+                                <div class="color-option" style="background-color: #00FA9A;" data-color="#00FA9A"></div>
+                                <div class="color-option" style="background-color: #40E0D0;" data-color="#40E0D0"></div>
+                                <div class="color-option" style="background-color: #00CED1;" data-color="#00CED1"></div>
+                                <div class="color-option" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
+                                <div class="color-option" style="background-color: #6495ED;" data-color="#6495ED"></div>
+                                <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
+                                <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
+                                <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
+                                <div class="color-option" style="background-color: #8A2BE2;" data-color="#8A2BE2"></div>
+                                <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
+                                <div class="color-option" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+                                <div class="color-option" style="background-color: #DA70D6;" data-color="#DA70D6"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Elementos Decorativos</label>
+                            <div class="decoration-elements">
+                                <div class="decoration-element" data-element="border">
+                                    <i class="fas fa-border-all"></i>
+                                </div>
+                                <div class="decoration-element" data-element="flower">
+                                    <i class="fas fa-feather-alt"></i>
+                                </div>
+                                <div class="decoration-element" data-element="star">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="decoration-element" data-element="heart">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="decoration-element" data-element="leaf">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="decoration-element" data-element="crown">
+                                    <i class="fas fa-crown"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -632,7 +921,12 @@
                 <div class="page-editor">
                     <div class="page-toolbar">
                         <button class="tool-btn" id="add-lined-page">+ Página com Linhas</button>
-                        <button class="tool-btn" id="add-image-page">+ Página com Imagem</button>
+                        <button class="tool-btn" id="add-paragraph-page">+ Parágrafo</button>
+                        <button class="tool-btn" id="add-dialogue-page">+ Diálogo</button>
+                        <button class="tool-btn" id="add-thought-page">+ Pensamento</button>
+                        <button class="tool-btn" id="add-quote-page">+ Citação</button>
+                        <button class="tool-btn" id="add-image-page">+ Imagem</button>
+                        <button class="tool-btn" id="add-drawing-page">+ Desenho</button>
                         <button class="tool-btn" id="add-introduction">+ Introdução</button>
                         <button class="tool-btn" id="add-toc">+ Sumário</button>
                         <button class="tool-btn" id="add-conclusion">+ Conclusão</button>
@@ -693,6 +987,26 @@
         </div>
     </footer>
 
+    <!-- Modal para desenho -->
+    <div class="modal" id="drawing-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editor de Desenho</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="drawing-tools">
+                <button class="drawing-tool active" data-tool="pencil">Lápis</button>
+                <button class="drawing-tool" data-tool="brush">Pincel</button>
+                <button class="drawing-tool" data-tool="eraser">Borracha</button>
+                <input type="color" id="drawing-color" value="#000000">
+                <input type="range" id="brush-size" min="1" max="20" value="3">
+                <button class="drawing-tool" id="clear-canvas">Limpar</button>
+                <button class="drawing-tool" id="save-drawing">Salvar</button>
+            </div>
+            <canvas class="drawing-canvas" id="drawing-canvas"></canvas>
+        </div>
+    </div>
+
     <script>
         // Tab Navigation
         document.querySelectorAll('.tab').forEach(tab => {
@@ -715,6 +1029,11 @@
         const previewAuthor = document.getElementById('preview-author');
         const bookCoverPreview = document.getElementById('book-cover-preview');
         const colorOptions = document.querySelectorAll('.color-option');
+        const fontOptions = document.querySelectorAll('.font-option');
+        const sizeOptions = document.querySelectorAll('.size-option');
+        const fontSizeSlider = document.getElementById('font-size');
+        const fontSizeValue = document.getElementById('font-size-value');
+        const decorationElements = document.querySelectorAll('.decoration-element');
 
         bookTitleInput.addEventListener('input', () => {
             previewTitle.textContent = bookTitleInput.value || 'Título do Livro';
@@ -732,6 +1051,36 @@
             });
         });
 
+        fontOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                fontOptions.forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                previewTitle.style.fontFamily = option.getAttribute('data-font');
+            });
+        });
+
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                sizeOptions.forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                // Aqui você poderia ajustar o tamanho da prévia baseado no tamanho selecionado
+            });
+        });
+
+        fontSizeSlider.addEventListener('input', () => {
+            const size = fontSizeSlider.value;
+            fontSizeValue.textContent = `${size}px`;
+            previewTitle.style.fontSize = `${size}px`;
+        });
+
+        decorationElements.forEach(element => {
+            element.addEventListener('click', () => {
+                const elementType = element.getAttribute('data-element');
+                // Aqui você implementaria a lógica para adicionar elementos decorativos à capa
+                alert(`Elemento decorativo "${elementType}" adicionado à capa!`);
+            });
+        });
+
         // Page Management
         let currentPage = 1;
         const pages = [document.querySelector('.page-content').innerHTML];
@@ -744,10 +1093,93 @@
             updatePageDisplay();
         });
 
-        document.getElementById('add-image-page').addEventListener('click', () => {
-            pages.push('<div class="image-page"><i class="fas fa-image"></i><p>Clique para adicionar uma imagem</p></div>');
+        document.getElementById('add-paragraph-page').addEventListener('click', () => {
+            pages.push('<div class="paragraph-page" contenteditable="true"><p>Escreva seu parágrafo aqui...</p></div>');
             currentPage = pages.length;
             updatePageDisplay();
+        });
+
+        document.getElementById('add-dialogue-page').addEventListener('click', () => {
+            pages.push(`<div class="dialogue-page" contenteditable="true">
+                <div class="character">Personagem 1:</div>
+                <div class="speech">Escreva o diálogo aqui...</div>
+                <div class="character">Personagem 2:</div>
+                <div class="speech">Resposta do personagem 2...</div>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
+        document.getElementById('add-thought-page').addEventListener('click', () => {
+            pages.push(`<div class="thought-page" contenteditable="true">
+                <div class="thought">Escreva o pensamento do personagem aqui...</div>
+                <div class="thought">Outro pensamento...</div>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
+        document.getElementById('add-quote-page').addEventListener('click', () => {
+            pages.push(`<div class="quote-page" contenteditable="true">
+                <blockquote>
+                    "Escreva uma citação inspiradora aqui..."
+                </blockquote>
+                <div class="author">- Autor da citação</div>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+        });
+
+        document.getElementById('add-image-page').addEventListener('click', () => {
+            pages.push(`<div class="image-page">
+                <i class="fas fa-image"></i>
+                <p>Clique para adicionar uma imagem</p>
+                <input type="file" accept="image/*" style="display: none;" id="image-upload">
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+            
+            // Adicionar evento para upload de imagem após a página ser criada
+            setTimeout(() => {
+                const imagePage = document.querySelector('.image-page');
+                const imageUpload = document.getElementById('image-upload');
+                
+                imagePage.addEventListener('click', () => {
+                    imageUpload.click();
+                });
+                
+                imageUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            imagePage.innerHTML = `<img src="${event.target.result}" style="max-width: 100%; max-height: 100%;">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }, 100);
+        });
+
+        document.getElementById('add-drawing-page').addEventListener('click', () => {
+            pages.push(`<div class="drawing-page">
+                <div class="drawing-tools">
+                    <button class="drawing-tool active" data-tool="pencil">Lápis</button>
+                    <button class="drawing-tool" data-tool="brush">Pincel</button>
+                    <button class="drawing-tool" data-tool="eraser">Borracha</button>
+                    <input type="color" id="drawing-color" value="#000000">
+                    <input type="range" id="brush-size" min="1" max="20" value="3">
+                    <button class="drawing-tool" id="clear-canvas">Limpar</button>
+                </div>
+                <canvas class="drawing-canvas" id="drawing-canvas"></canvas>
+            </div>`);
+            currentPage = pages.length;
+            updatePageDisplay();
+            
+            // Inicializar o editor de desenho após a página ser criada
+            setTimeout(() => {
+                initializeDrawingCanvas();
+            }, 100);
         });
 
         document.getElementById('add-introduction').addEventListener('click', () => {
@@ -820,6 +1252,13 @@
             document.querySelector('.page-content').innerHTML = pages[currentPage - 1];
             currentPageElement.textContent = currentPage;
             totalPagesElement.textContent = pages.length;
+            
+            // Re-inicializar o editor de desenho se a página atual for de desenho
+            if (pages[currentPage - 1].includes('drawing-page')) {
+                setTimeout(() => {
+                    initializeDrawingCanvas();
+                }, 100);
+            }
         }
 
         // Navigation between tabs
@@ -834,6 +1273,146 @@
         // Download PDF (simulação)
         document.getElementById('download-pdf').addEventListener('click', () => {
             alert('Funcionalidade de download em PDF seria implementada aqui. Em uma aplicação real, isso geraria um PDF com todas as páginas do livro.');
+        });
+
+        // Funcionalidade de desenho
+        function initializeDrawingCanvas() {
+            const canvas = document.getElementById('drawing-canvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const drawingTools = document.querySelectorAll('.drawing-tool');
+            const brushSize = document.getElementById('brush-size');
+            const drawingColor = document.getElementById('drawing-color');
+            const clearCanvas = document.getElementById('clear-canvas');
+            
+            // Configurar o canvas
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Variáveis para controle do desenho
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            let currentTool = 'pencil';
+            let currentColor = '#000000';
+            let currentSize = 3;
+            
+            // Eventos de desenho
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Eventos para toque em dispositivos móveis
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            // Eventos para ferramentas
+            drawingTools.forEach(tool => {
+                tool.addEventListener('click', () => {
+                    if (tool.id === 'clear-canvas') {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        return;
+                    }
+                    
+                    drawingTools.forEach(t => t.classList.remove('active'));
+                    tool.classList.add('active');
+                    currentTool = tool.getAttribute('data-tool');
+                });
+            });
+            
+            brushSize.addEventListener('input', () => {
+                currentSize = brushSize.value;
+            });
+            
+            drawingColor.addEventListener('input', () => {
+                currentColor = drawingColor.value;
+            });
+            
+            if (clearCanvas) {
+                clearCanvas.addEventListener('click', () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+            }
+            
+            function startDrawing(e) {
+                isDrawing = true;
+                [lastX, lastY] = getCoordinates(e);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                const [x, y] = getCoordinates(e);
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                
+                if (currentTool === 'eraser') {
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = currentSize * 2;
+                } else {
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentSize;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                }
+                
+                ctx.stroke();
+                
+                [lastX, lastY] = [x, y];
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+            }
+            
+            function handleTouch(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousedown', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                
+                if (e.type === 'touchstart') {
+                    startDrawing(mouseEvent);
+                } else if (e.type === 'touchmove') {
+                    draw(mouseEvent);
+                }
+            }
+            
+            function getCoordinates(e) {
+                let x, y;
+                
+                if (e.type.includes('touch')) {
+                    const rect = canvas.getBoundingClientRect();
+                    x = e.touches[0].clientX - rect.left;
+                    y = e.touches[0].clientY - rect.top;
+                } else {
+                    x = e.offsetX;
+                    y = e.offsetY;
+                }
+                
+                return [x, y];
+            }
+        }
+
+        // Modal functionality
+        const drawingModal = document.getElementById('drawing-modal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        closeModal.addEventListener('click', () => {
+            drawingModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === drawingModal) {
+                drawingModal.style.display = 'none';
+            }
         });
     </script>
 </body>
