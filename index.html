@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LivroArt - Crie seu livro personalizado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary-color: #8B4513;
@@ -578,7 +580,7 @@
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Páginas com linhas ajustadas - CORRIGIDO */
+        /* Páginas com linhas CORRIGIDAS - texto EM CIMA da linha */
         .lined-page {
             min-height: 500px;
             padding: 1rem;
@@ -595,6 +597,18 @@
 
         .lined-page[contenteditable="true"] {
             outline: none;
+        }
+
+        /* Garantir que o texto fique EM CIMA da linha */
+        .lined-page * {
+            margin: 0;
+            padding: 0;
+            line-height: 30px;
+            vertical-align: top;
+        }
+
+        .lined-page br {
+            line-height: 30px;
         }
 
         .paragraph-page {
@@ -960,6 +974,37 @@
             color: white;
         }
 
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -1044,6 +1089,12 @@
     </style>
 </head>
 <body>
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Gerando PDF... Isso pode levar alguns segundos.</p>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container">
@@ -1196,7 +1247,7 @@
                             
                             <div class="form-group">
                                 <label>Cor da Capa</label>
-                                <div class="color-picker">
+                                <div class="color-picker" id="front-cover-color-picker">
                                     <!-- 60 cores diferentes para a capa -->
                                     <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
                                     <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
@@ -1324,6 +1375,7 @@
                             <div class="form-group">
                                 <label>Cor da Contracapa</label>
                                 <div class="color-picker" id="back-cover-color-picker">
+                                    <!-- TODAS as 60 cores também para a contracapa -->
                                     <div class="color-option active" style="background-color: #8B4513;" data-color="#8B4513"></div>
                                     <div class="color-option" style="background-color: #A0522D;" data-color="#A0522D"></div>
                                     <div class="color-option" style="background-color: #CD853F;" data-color="#CD853F"></div>
@@ -1334,6 +1386,80 @@
                                     <div class="color-option" style="background-color: #F4A460;" data-color="#F4A460"></div>
                                     <div class="color-option" style="background-color: #DEB887;" data-color="#DEB887"></div>
                                     <div class="color-option" style="background-color: #DAA520;" data-color="#DAA520"></div>
+                                    <div class="color-option" style="background-color: #BDB76B;" data-color="#BDB76B"></div>
+                                    <div class="color-option" style="background-color: #8FBC8F;" data-color="#8FBC8F"></div>
+                                    <div class="color-option" style="background-color: #2F4F4F;" data-color="#2F4F4F"></div>
+                                    <div class="color-option" style="background-color: #696969;" data-color="#696969"></div>
+                                    <div class="color-option" style="background-color: #778899;" data-color="#778899"></div>
+                                    <div class="color-option" style="background-color: #708090;" data-color="#708090"></div>
+                                    <div class="color-option" style="background-color: #4682B4;" data-color="#4682B4"></div>
+                                    <div class="color-option" style="background-color: #5F9EA0;" data-color="#5F9EA0"></div>
+                                    <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
+                                    <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
+                                    <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
+                                    <div class="color-option" style="background-color: #8B008B;" data-color="#8B008B"></div>
+                                    <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
+                                    <div class="color-option" style="background-color: #8B0000;" data-color="#8B0000"></div>
+                                    <div class="color-option" style="background-color: #B22222;" data-color="#B22222"></div>
+                                    <div class="color-option" style="background-color: #DC143C;" data-color="#DC143C"></div>
+                                    <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
+                                    <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
+                                    <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
+                                    <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                    <!-- Mais cores -->
+                                    <div class="color-option" style="background-color: #FF69B4;" data-color="#FF69B4"></div>
+                                    <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
+                                    <div class="color-option" style="background-color: #C71585;" data-color="#C71585"></div>
+                                    <div class="color-option" style="background-color: #DB7093;" data-color="#DB7093"></div>
+                                    <div class="color-option" style="background-color: #FFB6C1;" data-color="#FFB6C1"></div>
+                                    <div class="color-option" style="background-color: #FFA07A;" data-color="#FFA07A"></div>
+                                    <div class="color-option" style="background-color: #FF7F50;" data-color="#FF7F50"></div>
+                                    <div class="color-option" style="background-color: #FF6347;" data-color="#FF6347"></div>
+                                    <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
+                                    <div class="color-option" style="background-color: #FF8C00;" data-color="#FF8C00"></div>
+                                    <div class="color-option" style="background-color: #FFA500;" data-color="#FFA500"></div>
+                                    <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+                                    <div class="color-option" style="background-color: #FFFF00;" data-color="#FFFF00"></div>
+                                    <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
+                                    <div class="color-option" style="background-color: #7CFC00;" data-color="#7CFC00"></div>
+                                    <div class="color-option" style="background-color: #00FF00;" data-color="#00FF00"></div>
+                                    <div class="color-option" style="background-color: #32CD32;" data-color="#32CD32"></div>
+                                    <div class="color-option" style="background-color: #9ACD32;" data-color="#9ACD32"></div>
+                                    <div class="color-option" style="background-color: #00FA9A;" data-color="#00FA9A"></div>
+                                    <div class="color-option" style="background-color: #40E0D0;" data-color="#40E0D0"></div>
+                                    <div class="color-option" style="background-color: #00CED1;" data-color="#00CED1"></div>
+                                    <div class="color-option" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
+                                    <div class="color-option" style="background-color: #6495ED;" data-color="#6495ED"></div>
+                                    <div class="color-option" style="background-color: #7B68EE;" data-color="#7B68EE"></div>
+                                    <div class="color-option" style="background-color: #6A5ACD;" data-color="#6A5ACD"></div>
+                                    <div class="color-option" style="background-color: #483D8B;" data-color="#483D8B"></div>
+                                    <div class="color-option" style="background-color: #8A2BE2;" data-color="#8A2BE2"></div>
+                                    <div class="color-option" style="background-color: #9932CC;" data-color="#9932CC"></div>
+                                    <div class="color-option" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+                                    <div class="color-option" style="background-color: #DA70D6;" data-color="#DA70D6"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Elementos Decorativos</label>
+                                <div class="decoration-elements">
+                                    <div class="decoration-element" data-element="border">
+                                        <i class="fas fa-border-all"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="flower">
+                                        <i class="fas fa-feather-alt"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="star">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="heart">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="leaf">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div class="decoration-element" data-element="crown">
+                                        <i class="fas fa-crown"></i>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -1501,8 +1627,14 @@
                     <h3>Visualização do Livro</h3>
                     <p>Seu livro está pronto! Clique no botão abaixo para baixar em PDF.</p>
                     <button class="btn" id="download-pdf">
-                        <i class="fas fa-download"></i> Baixar PDF
+                        <i class="fas fa-download"></i> Baixar PDF Completo
                     </button>
+                    <div style="margin-top: 2rem; font-size: 0.9rem; color: #666;">
+                        <p><strong>O PDF incluirá:</strong></p>
+                        <p>• Capa frontal personalizada</p>
+                        <p>• Todo o conteúdo do livro</p>
+                        <p>• Contracapa personalizada</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1614,7 +1746,7 @@
         const backCoverPreview = document.getElementById('back-cover-preview');
         const backCoverTextInput = document.getElementById('back-cover-text');
         const previewBackText = document.getElementById('preview-back-text');
-        const colorOptions = document.querySelectorAll('.color-option');
+        const frontColorOptions = document.querySelectorAll('#front-cover-color-picker .color-option');
         const backColorOptions = document.querySelectorAll('#back-cover-color-picker .color-option');
         const fontOptions = document.querySelectorAll('.font-option');
         const sizeOptions = document.querySelectorAll('.size-option');
@@ -1679,15 +1811,15 @@
         }
 
         // Controles de cor para a capa frontal
-        colorOptions.forEach(option => {
+        frontColorOptions.forEach(option => {
             option.addEventListener('click', () => {
-                colorOptions.forEach(o => o.classList.remove('active'));
+                frontColorOptions.forEach(o => o.classList.remove('active'));
                 option.classList.add('active');
                 bookCoverPreview.style.backgroundColor = option.getAttribute('data-color');
             });
         });
 
-        // Controles de cor para a contracapa
+        // Controles de cor para a contracapa (TODAS as cores)
         backColorOptions.forEach(option => {
             option.addEventListener('click', () => {
                 backColorOptions.forEach(o => o.classList.remove('active'));
@@ -2199,9 +2331,64 @@
             document.getElementById('content-tab').classList.add('active');
         });
 
-        // Download PDF (simulação)
-        document.getElementById('download-pdf').addEventListener('click', () => {
-            alert('Funcionalidade de download em PDF seria implementada aqui. Em uma aplicação real, isso geraria um PDF com todas as páginas do livro.');
+        // Exportar para PDF - FUNCIONALIDADE COMPLETA
+        document.getElementById('download-pdf').addEventListener('click', async () => {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            try {
+                // Usar jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                
+                // Adicionar capa frontal
+                const frontCoverCanvas = await html2canvas(bookCoverPreview);
+                const frontCoverImg = frontCoverCanvas.toDataURL('image/jpeg', 0.9);
+                pdf.addImage(frontCoverImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                pdf.addPage();
+                
+                // Adicionar conteúdo
+                for (let i = 0; i < pages.length; i++) {
+                    if (i > 0) pdf.addPage();
+                    
+                    // Criar um elemento temporário para renderizar a página
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = pages[i];
+                    tempDiv.style.width = '794px'; // A4 width in pixels at 96 DPI
+                    tempDiv.style.padding = '40px';
+                    tempDiv.style.fontFamily = currentFont;
+                    tempDiv.style.fontSize = '12pt';
+                    tempDiv.style.lineHeight = '1.6';
+                    document.body.appendChild(tempDiv);
+                    
+                    const pageCanvas = await html2canvas(tempDiv, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    
+                    document.body.removeChild(tempDiv);
+                    
+                    const pageImg = pageCanvas.toDataURL('image/jpeg', 0.9);
+                    pdf.addImage(pageImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                }
+                
+                // Adicionar contracapa
+                pdf.addPage();
+                const backCoverCanvas = await html2canvas(backCoverPreview);
+                const backCoverImg = backCoverCanvas.toDataURL('image/jpeg', 0.9);
+                pdf.addImage(backCoverImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                
+                // Salvar o PDF
+                const title = bookTitleInput.value || 'meu_livro';
+                pdf.save(`${title}.pdf`);
+                
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Erro ao gerar PDF. Por favor, tente novamente.');
+            } finally {
+                loading.style.display = 'none';
+            }
         });
 
         // Funcionalidade de desenho
